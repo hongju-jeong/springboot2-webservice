@@ -34,10 +34,20 @@ public class PostsService {
         return id;
     }
 
+    @Transactional
+    public void delete(Long id){
+        Posts posts = postsRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당게시글이 없습니다. id = "+ id));
+
+        postsRepository.delete(posts);
+    }
+
+
     @Transactional(readOnly = true)
     public List<PostsListResponseDto> findAllDesc(){
         return postsRepository.findAllDesc().stream().map(PostsListResponseDto::new).collect(Collectors.toList());
     }
+
 
     public PostsResponseDto findById (Long id){
         Posts entity = postsRepository.findById(id)
